@@ -11,4 +11,9 @@ slurm: jobScript.slurm
 	sbatch $<
 
 clean:
-	rm -r code_llama_pipe cloudshield_pipe
+	rm -r CloudShield/attack/ai_modified/modified_attack.c
+	rm -r CloudShield/attack/ai_modified/Makefile
+	rm -r CloudShield/attack/ai_modified/ai_modified_attack
+	rm -r CloudShield/attack/ai_modified/spectre_result.csv
+	rm -r CloudShield/attack/ai_modified/spectre_time.csv
+	rmdir CloudShield/attack/ai_modified
