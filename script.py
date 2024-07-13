@@ -33,8 +33,8 @@ def get_modified_spectre_v1():
 #Get rid of infinite loops
 def modified_code_llama():
     print("modified code llama")
-    message = "Without explanation, change the following code to be 3 lines long and keep the comments to a minimum: \n:"
-    message += get_spectre_v1()
+    message = "Without explanation, change the following code by replacing while(1) with while(number of successes < number of characters in the secret) but keep the comments to a minimum: \n:"
+    message += get_modified_spectre_v1()
     json_api = build_api(message)
     return llama.run(json_api)
 
@@ -58,31 +58,26 @@ def get_attack(response):
     stop = False
     with open('modified_attack.c', 'w') as file2:
         for line in all_lines:
-            if key in line and flag:
+            if key in line and flag: #end of code
                 flag = False
                 stop = True
-            elif key in line and not flag:
+            elif key in line and not flag: #beginning of code
                 flag = True
             elif flag and not stop:
                 file2.write(line)
-    os.remove('temp.txt')
+    #os.remove('temp.txt')
     check = os.system("clang modified_attack.c")
     if check != 0:
         print("Compilation error.")
         code_llama()
-
     #Check for infinite loops
     filename = 'modified_attack.c'
-    loop_exists = False
-    with open(filename, 'r') as file:
-        for line in file:
-            if 'while (1) {' in line:
-                #INFINITE LOOP FOUND REMOVE IT
-                print("Found infinite loop")
-                loop_exists = True
-                
-    if loop_exists:
-        get_attack(modified_code_llama())
+    check_loop = os.system(f"grep 'while (1)' {filename}")
+    if check_loop == 0:
+         print("Found infinite loop")
+         get_attack(modified_code_llama())
+                       
+       
 
 # Moves generated attack to CloudShield location
 def relocate_attack():
