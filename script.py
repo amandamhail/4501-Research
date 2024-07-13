@@ -1,4 +1,5 @@
-import os, time, process, sys
+import os, time, sys
+from multiprocessing import process
 from llamaapi import LlamaAPI
 
 # Initializes the SDK
@@ -22,8 +23,24 @@ def get_spectre_v1():
         content = file.read()
     return content
 
+# Gets the new attack
+def get_modified_spectre_v1():
+    file_path = "modified_attack.c"
+    with open(file_path, 'r') as file:
+        content = file.read()
+    return content
+
+#Get rid of infinite loops
+def modified_code_llama():
+    print("modified code llama")
+    message = "Without explanation, change the following code to be 3 lines long and keep the comments to a minimum: \n:"
+    message += get_spectre_v1()
+    json_api = build_api(message)
+    return llama.run(json_api)
+
 # Executes the request
 def code_llama():
+    print("Code LLama")
     message = "Without explanation, change the following code to reduce the L1 cache miss rate but keep the comments to a minimum: \n:"
     message += get_spectre_v1()
     json_api = build_api(message)
@@ -31,6 +48,7 @@ def code_llama():
 
 # Parses through JSON object and extracts only the modified code
 def get_attack(response):
+    print("Get Attack")
     key = "```"
     with open('temp.txt', 'w') as file:
         file.write(response.json()['choices'][0]['message']['content'])
@@ -53,10 +71,25 @@ def get_attack(response):
         print("Compilation error.")
         code_llama()
 
+    #Check for infinite loops
+    filename = 'modified_attack.c'
+    loop_exists = False
+    with open(filename, 'r') as file:
+        for line in file:
+            if 'while (1) {' in line:
+                #INFINITE LOOP FOUND REMOVE IT
+                print("Found infinite loop")
+                loop_exists = True
+                
+    if loop_exists:
+        get_attack(modified_code_llama())
+
 # Moves generated attack to CloudShield location
 def relocate_attack():
-    os.system("mkdir CloudShield/attack/ai_modified")
-    os.system("mv modified_attack.c CloudShield/attack/ai_modified")
+    print("relocating the attack")
+    os.system("rmdir CloudShield/attack/ai_modified_Kat/modified_attack.c")
+    os.system("mkdir CloudShield/attack/ai_modified_Kat")     
+    os.system("mv modified_attack.c CloudShield/attack/ai_modified_Kat")
     mf_contents = '''CC = gcc
 CC44 = gcc-4.4
 FLAGS = -static -std=c99 -g
@@ -67,7 +100,7 @@ modified: modified_attack.c
 
 clean:
 \trm -f ai_modified_attack'''
-    with open('CloudShield/attack/ai_modified/Makefile', 'w') as file:
+    with open('CloudShield/attack/ai_modified_Kat/Makefile', 'w') as file:
         file.write(mf_contents)
 
 # def analysis():
