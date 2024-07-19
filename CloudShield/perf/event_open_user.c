@@ -9,7 +9,7 @@
 #include <asm/unistd.h>
 #include <errno.h>
 
-#define EVENT_NR 19
+#define EVENT_NR 5
 #define EVENT_CUR 4
 
 uint64_t INTERVAL;
@@ -26,9 +26,24 @@ struct timeval global_time;
 struct event event_monitor[EVENT_NR+1];
 
 void event_initialize() {
-
+	//added new performance counters that worked on akalita portal
 	event_monitor[0].event_type = PERF_TYPE_HARDWARE;
 	event_monitor[0].event_config = PERF_COUNT_HW_INSTRUCTIONS;
+
+	event_monitor[1].event_type = PERF_TYPE_HARDWARE;
+    event_monitor[1].event_config = PERF_COUNT_HW_CACHE_REFERENCES;
+
+    event_monitor[2].event_type = PERF_TYPE_HARDWARE;
+    event_monitor[2].event_config = PERF_COUNT_HW_CACHE_MISSES;
+
+    event_monitor[3].event_type = PERF_TYPE_HARDWARE;
+    event_monitor[3].event_config = PERF_COUNT_HW_BRANCH_INSTRUCTIONS;
+
+    event_monitor[4].event_type = PERF_TYPE_HARDWARE;
+    event_monitor[4].event_config = PERF_COUNT_HW_BRANCH_MISSES;
+
+	// event_monitor[0].event_type = PERF_TYPE_HARDWARE;
+	// event_monitor[0].event_config = PERF_COUNT_HW_INSTRUCTIONS;
 
 //	event_monitor[1].event_type = PERF_TYPE_HW_CACHE;
 //	event_monitor[1].event_config = (PERF_COUNT_HW_CACHE_L1D)|(PERF_COUNT_HW_CACHE_OP_READ << 8)|(PERF_COUNT_HW_CACHE_RESULT_ACCESS << 16);

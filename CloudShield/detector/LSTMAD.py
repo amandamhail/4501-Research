@@ -439,6 +439,10 @@ if __name__ == '__main__':
                                 utils.bcolors.ENDC
                             )
 
+                            print("Feature impact:")
+                            for idx, impact in enumerate(RE_per_feature.mean(axis=0)):
+                                print('{feature}: {impact}'.format(feature=utils.id_to_feature[idx], impact = impact))
+
                             data_write_dir = os.path.join(args.data_dir, args.load_model_name)
                             os.system('mkdir -p {dir}'.format(dir=data_write_dir))
                             np.save(
@@ -482,6 +486,7 @@ if __name__ == '__main__':
                                 "Pred abnormal:", np.sum(anomaly_scores>th) / float(len(anomaly_scores)),
                                 utils.bcolors.ENDC
                             )
+                            
             else:
                 _, testing_normal_data, _, = loaddata.load_data_split(
                     data_dir = args.data_dir,
