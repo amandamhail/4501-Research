@@ -28,7 +28,8 @@ class FeatureSelect:
     #feature_list = [0, 1, 27, 13, 28, 3, 19, 6, 15, 2, 31]
 
     #feature_list = [0, 32, 33, 27, 1, 13, 3, 19, 15, 28, 2, 6, 31]
-    feature_list = range(19)
+    # feature_list = range(19)
+    feature_list = range(5) 
 
 def read_npy_data_single_flle(filename):
     print("Reading Data: " + filename)
@@ -358,26 +359,31 @@ def create_parser():
 
 # [0, 32, 33, 27, 1, 13, 3, 19, 15, 28, 2, 6, 31]
 id_to_feature = {
-    0: 'Ins',
-    1: 'L1D read access (# load)',
-    2: 'L1D read miss',
-    3: 'L1D write access (# store)',
-    4: 'DTLB read access',
-    5: 'DTLB read miss',
-    6: 'DTLB write access',
-    7: 'DTLB write miss',
-    8: 'BPU read access',
-    9: 'BPU read miss',
-    10: 'Cache node read access',
-    11: 'Cache node read miss',
-    12: 'Cache node write access',
-    13: 'Cache node write miss',
-    14: 'cycles',
-    15: 'branch instructions',
-    16: 'branch prediction miss',
-    17: 'page faults',
-    18: 'context switch',
-    19: 'Time stamp',
+    0: 'instructions',
+    1: 'cache-references',
+    2: 'cache-misses',
+    3: 'branch-instructions',
+    4: 'branch-misses'
+    # 0: 'Ins',
+    # 1: 'L1D read access (# load)',
+    # 2: 'L1D read miss',
+    # 3: 'L1D write access (# store)',
+    # 4: 'DTLB read access',
+    # 5: 'DTLB read miss',
+    # 6: 'DTLB write access',
+    # 7: 'DTLB write miss',
+    # 8: 'BPU read access',
+    # 9: 'BPU read miss',
+    # 10: 'Cache node read access',
+    # 11: 'Cache node read miss',
+    # 12: 'Cache node write access',
+    # 13: 'Cache node write miss',
+    # 14: 'cycles',
+    # 15: 'branch instructions',
+    # 16: 'branch prediction miss',
+    # 17: 'page faults',
+    # 18: 'context switch',
+    # 19: 'Time stamp',
 }
 
 spec_benchmarks = ('perlbench', 'bzip2', 'gcc', 'mcf', 'milc', 'namd',
